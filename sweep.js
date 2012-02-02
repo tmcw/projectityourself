@@ -1,9 +1,3 @@
-var Canvas = require('canvas'),
-    Image = Canvas.Image,
-    fs = require('fs'),
-    canvas = new Canvas(980,980),
-    ctx = canvas.getContext('2d');
-
 var d3_radians = Math.PI / 180;
 // TODO clip input coordinates on opposite hemisphere
 var azimuthal = function() {
@@ -114,18 +108,45 @@ var mercator = function() {
 };
 
 
-var fcanvas = new Canvas(600,300),
-    fctx = fcanvas.getContext('2d');
+if (module) {
+    var Canvas = require('canvas'),
+        fs = require('fs'),
+        Image = Canvas.Image;
+    var canvas = new Canvas(600, 600),
+        ctx = canvas.getContext('2d');
+
+    var fcanvas = new Canvas(600, 300),
+        fctx = canvas.getContext('2d');
+
+    bm = new Image();
+    bm.src = fs.readFileSync(__dirname + '/bm.jpeg');
+} else {
+    var bm = document.getElementById('bm'),
+        canvas = document.getElementById('c2'),
+        ctx = canvas.getContext('2d'),
+        fcanvas = document.getElementById('c'),
+        fctx = fcanvas.getContext('2d');
+
+    canvas.width = 600;
+    canvas.height = 600;
+
+    fcanvas.width = 600;
+    fcanvas.height = 300;
+
+    var to = window.setInterval(draw, 0);
+}
+
+fctx.drawImage(bm, 0, 0, 600, 300);
 
 var merc = mercator()
     .scale(400)
-    .translate([200, 200]);
+    .translate([300, 300]);
 
 var ortho = azimuthal()
-      .scale(130)
+      .scale(230)
       .origin([0, 40])
       .mode("orthographic")
-      .translate([140, 140]);
+      .translate([300, 300]);
 
 var pts = [];
 var colors = [];
@@ -136,52 +157,55 @@ for (var x = -180; x <= 180; x += 1) {
     }
 }
 
-fs.readFile(__dirname + '/bm.jpeg', function(err, im){
-    img = new Image();
-    img.src = im;
-    fctx.drawImage(img, 0, 0, 600, 300);
-    var w = 600;
-    var imgData = fctx.getImageData(0, 0, fcanvas.width, fcanvas.height);
-    var data = imgData.data;
+var imgData = fctx.getImageData(0, 0, fcanvas.width, fcanvas.height);
+var data = imgData.data;
 
-    for (var i = 0; i < pts.length; i++) {
-        // var x = Math.round(((~pts[i].coord[0] + 180) / 360) * 600);
-        // var y = Math.round(((-pts[i].coord[1] + 90) / 180) * 300);
-        var x = -pts[i].coord[0] + 180;
-        var y = -pts[i].coord[1] + 90;
-        var r = data[4 * (y * w + x) + 0],
-            g = data[4 * (y * w + x) + 1],
-            b = data[4 * (y * w + x) + 2];
-        pts[i].color = 'rgb(' + [r, g, b].join(',') + ')';
-    }
-    draw();
-});
-
-
-function draw() {
-
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, 480, 320);
-
-
-    for (var i = 0; i < pts.length; i++) {
-        var px = merc(pts[i].coord);
-        ctx.fillStyle = pts[i].color;
-        console.log(px);
-        ctx.fillRect(px[0], px[1], 1, 1);
-    }
-
-    var fs = require('fs'),
-        out = fs.createWriteStream(__dirname + '/test.png'),
-        stream = canvas.createPNGStream();
-
-    stream.on('data', function(chunk){
-      out.write(chunk);
-    });
-
-    stream.on('end', function(){
-      console.log('saved png');
-    });
+var w = 600;
+for (var i = 0; i < pts.length; i++) {
+    var x = Math.floor((pts[i].coord[0] + 180) * (600/360));
+    var y = Math.floor((-pts[i].coord[1] + 90) * (300/180));
+    var r = data[4 * ((y * w) + x) + 0],
+        g = data[4 * ((y * w) + x) + 1],
+        b = data[4 * ((y * w) + x) + 2];
+    pts[i].color = 'rgb(' + [r, g, b].join(',') + ')';
 }
 
-// console.log(merc([0, 5]));
+var startTime = +new Date();
+
+var n = 0;
+
+function draw(t) {
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, 600, 600);
+
+
+    for (var i = 0; i < pts.length; i++) {
+        var mc = merc(pts[i].coord);
+        var oc = ortho(pts[i].coord);
+        var px = [
+            mc[0] * (1 - t) +
+            oc[0] * (t),
+            mc[1] * (1 - t) +
+            oc[1] * (t)
+        ];
+        ctx.fillStyle = pts[i].color;
+        ctx.fillRect(px[0], px[1], 2, 2);
+    }
+
+    if (module) {
+        var name = (('' + n).length == 1) ? '0' + n + '.png' : n + '.png';
+        fs.writeFileSync(n + '.png', canvas.toBuffer());
+        n++;
+    }
+}
+
+if (module) {
+    for (var t = 0; t <= 1; t += 0.1) {
+        draw(t);
+    }
+    for (var t = 1; t >= 0; t -= 0.1) {
+        draw(t);
+    }
+} else {
+    var t = 0.5 * (Math.sin((+new Date() - startTime) / 2000) + 1);
+}
