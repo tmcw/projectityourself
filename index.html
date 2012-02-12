@@ -8,23 +8,37 @@
   <body>
     <div class='wrapper'>
       <div class='head'>
-        <img src='img/header.jpg' />
-        <img id='bm' src='img/bm.jpg' />
+        <h1>Project it Yourself!</h1>
       </div>
 
-      <p>x = f(x, y)</p>
-      <textarea id='fx'>return x</textarea>
-
-      <p>y = f(x, y)</p>
-      <textarea id='fy'>return y</textarea>
+      <h2>1. Choose how sweet your computer is</h2>
 
       <div class='rigs'>
-      <p>HOW SWEET IS YOUR COMPUTER?</p>
-      <img id='netbook' src='img/netbook.png' />
-      <img id='rig' src='img/rig.png' />
+          <img class='selected' id='netbook' src='img/netbook.png' />
+          <img id='rig' src='img/rig.png' />
       </div>
 
-      <button id='doit'>DO IT</button>
+      <h2>2. Write your projection</h2>
+      <p>Fill in the blanks with the body of Javascript
+      functions implementing a projection. Both functions
+      take x &amp; y for longitude and latitude and should
+      return a number.</p>
+      <table>
+        <tr>
+          <td>x = function(x, y)</td>
+          <td>
+            <textarea id='fx'>return x</textarea>
+          </td>
+          </tr><tr>
+          <td>y = function(x, y)</td>
+          <td>
+            <textarea id='fy'>return y</textarea>
+          </td>
+        </tr>
+      </table>
+
+      <h2>3. Click do it</h2>
+      <button id='doit'>Do it!</button>
 
       <canvas id='c2'></canvas>
       <canvas id='c'></canvas>

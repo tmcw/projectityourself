@@ -17,8 +17,8 @@ bm.onload = function() {
 };
 bm.src = 'img/bm.jpg';
 
-var skip = 2;
-var block = 3;
+var skip = 5;
+var block = 7;
 
 function draw(fx, fy) {
     if (!loaded) return;
