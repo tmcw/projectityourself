@@ -108,7 +108,7 @@ var mercator = function() {
 };
 
 
-if (module) {
+if (typeof module != 'undefined') {
     var Canvas = require('canvas'),
         fs = require('fs'),
         Image = Canvas.Image;
@@ -192,19 +192,17 @@ function draw(t) {
         ctx.fillRect(px[0], px[1], 2, 2);
     }
 
-    if (module) {
+    if (typeof module != 'undefined') {
         var name = (('' + n).length == 1) ? '0' + n + '.png' : n + '.png';
-        fs.writeFileSync(n + '.png', canvas.toBuffer());
+        fs.writeFileSync(name, canvas.toBuffer());
         n++;
     }
 }
 
-if (module) {
-    for (var t = 0; t <= 1; t += 0.1) {
-        draw(t);
-    }
-    for (var t = 1; t >= 0; t -= 0.1) {
-        draw(t);
+if (typeof module != 'undefined') {
+  var HPI = Math.PI * 0.5;
+    for (var t = 0; t <= 4; t += 0.1) {
+        draw(0.5 * Math.sin((t * HPI) + HPI) + 0.5);
     }
 } else {
     var t = 0.5 * (Math.sin((+new Date() - startTime) / 2000) + 1);

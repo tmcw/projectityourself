@@ -1,0 +1,63 @@
+body {
+  background:#f9d4a7;
+  font:15px/20px 'Helvetica Neue';
+}
+
+.wrapper {
+  width:640px;
+  margin:0 auto;
+}
+
+.head {
+  background:#f9d4a7;
+}
+
+#c2 {
+  margin:20px;
+}
+
+#bm {
+  float:right;
+  height:150px;
+  margin:10px;
+  width:300px;
+}
+
+#doit {
+  background:#000;
+  color:#fff;
+  border:0;
+  width:640px;
+  padding:20px;
+}
+
+#doit:hover {
+  color:#FFE100;
+  font-size:30px;
+  font-weight:bold;
+}
+
+#c {
+  display:none;
+}
+
+textarea {
+  width:640px;
+  height:60px;
+  font:monospace;
+  padding:0;
+}
+
+div.rigs {
+  text-align:center;
+  font-weight:bold;
+}
+
+div.rigs img {
+  padding:10px;
+  cursor:pointer;
+}
+
+img.selected {
+  background:#FFF6AF;
+}
