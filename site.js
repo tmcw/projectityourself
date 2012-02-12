@@ -1,20 +1,27 @@
-var bm = document.getElementById('bm'),
-    canvas = document.getElementById('c2'),
+var canvas = document.getElementById('c2'),
     ctx = canvas.getContext('2d'),
     fcanvas = document.getElementById('c'),
     fctx = fcanvas.getContext('2d');
 
+var loaded = false;
 var w = 600;
 canvas.width = w;
 canvas.height = 600;
 fcanvas.width = w;
 fcanvas.height = 300;
-fctx.drawImage(bm, 0, 0, 600, 300);
+
+var bm = new Image();
+bm.onload = function() {
+  loaded = true;
+  fctx.drawImage(bm, 0, 0, 600, 300);
+};
+bm.src = 'img/bm.jpg';
 
 var skip = 2;
 var block = 3;
 
 function draw(fx, fy) {
+    if (!loaded) return;
     var pts = [];
     for (var x = -180; x <= 180; x += skip) {
       for (var y = -90; y <= 90; y += skip) {
