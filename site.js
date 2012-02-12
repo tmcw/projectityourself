@@ -75,7 +75,6 @@ function draw(fx, fy) {
     var xoffset = -minx;
     var yoffset = -miny;
 
-    console.log(scale_denom);
     // Finally draw the points
     for (var i = 0; i < mappings.length; i++) {
         ctx.fillStyle = mappings[i].color;
@@ -89,7 +88,6 @@ function draw(fx, fy) {
 document.getElementById('doit').onclick = function() {
     eval('var fx = function(x, y) { ' + document.getElementById('fx').value + '}');
     eval('var fy = function(x, y) { ' + document.getElementById('fy').value + '}');
-
     draw(fx, fy);
 }
 
