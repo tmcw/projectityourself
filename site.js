@@ -113,3 +113,32 @@ document.getElementById('netbook').onclick = function() {
     skip = 5;
     block = 7;
 };
+
+function loadpreset() {
+if (window.location.hash) {
+  var id = parseInt(window.location.hash.substring(1));
+  if (isNaN(id)) return alert('you gave a location hash but it wasn\'t an id!');
+  var head =  document.getElementsByTagName('head')[0];
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  head.appendChild(script);
+  document.getElementById('fx').value =
+  document.getElementById('fy').value = '... loading preset ...';
+  script.onload = function() {
+    document.getElementById('fx').value =
+      fx.toString()
+        .replace('function fx(x, y) {', '')
+        .replace(/\}/g, '');
+    document.getElementById('fy').value =
+      fy.toString()
+        .replace('function fy(x, y) {', '')
+        .replace(/\}/g, '');
+  };
+  script.src = 'https://raw.github.com/gist/' + id;
+}
+}
+
+loadpreset();
+
+window.onhashchange = loadpreset;
+
