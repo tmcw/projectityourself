@@ -4,9 +4,9 @@ var canvas = document.getElementById('c2'),
     fctx = fcanvas.getContext('2d');
 
 var loaded = false;
-var w = 600;
+var w = ~~Math.min(window.innerHeight - 10, window.innerWidth - 500);
 canvas.width = w;
-canvas.height = 600;
+canvas.height = w;
 fcanvas.width = w;
 fcanvas.height = 300;
 
@@ -41,7 +41,7 @@ function draw(fx, fy) {
         pts[i].color = 'rgb(' + [r, g, b].join(',') + ')';
     }
     ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, 600, 600);
+    ctx.fillRect(0, 0, w, w);
 
     var mappings = [];
 
@@ -92,27 +92,32 @@ function draw(fx, fy) {
     }
 }
 
-document.getElementById('doit').onclick = function() {
+function load_and_draw() {
     eval('var fx = function(x, y) { ' + document.getElementById('fx').value + '}');
     eval('var fy = function(x, y) { ' + document.getElementById('fy').value + '}');
     draw(fx, fy);
 }
 
-document.getElementById('rig').onclick = function() {
-    if (this.className == 'selected') return;
-    this.className = 'selected';
-    document.getElementById('netbook').className = '';
+document.getElementById('hifi').onclick = function() {
     skip = 1;
-    block = 2;
+    block = 4;
+    load_and_draw();
 };
 
-document.getElementById('netbook').onclick = function() {
-    if (this.className == 'selected') return;
-    this.className = 'selected';
-    document.getElementById('rig').className = '';
+document.getElementById('lofi').onclick = function() {
     skip = 5;
     block = 7;
+    load_and_draw();
 };
+
+document.getElementById('share-button').onclick = function() {
+    document.getElementById('share').style.display = 'block';
+    document.getElementById('gist-share').value =
+      'function fx(x, y) {\n' +
+      document.getElementById('fx').value + '}' +
+      '\nfunction fy(x, y) {\n' +
+      document.getElementById('fy').value + '}';
+}
 
 function loadpreset() {
 if (window.location.hash) {

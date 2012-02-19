@@ -6,49 +6,41 @@
     <link href='site.css' rel='stylesheet' type='text/css' />
   </head>
   <body>
+    <canvas id='c2'></canvas>
+    <canvas id='c'></canvas>
     <div class='wrapper'>
       <div class='head'>
         <h1>Project it Yourself!</h1>
       </div>
 
-      <h2>1. Choose how sweet your computer is</h2>
-
-      <div class='rigs'>
-          <img class='selected' id='netbook' src='img/netbook.png' />
-          <img id='rig' src='img/rig.png' />
-      </div>
-
-      <h2>2. Write your projection</h2>
-      <p>Fill in the blanks with the body of Javascript
-      functions implementing a projection. Both functions
-      take x &amp; y for longitude and latitude and should
-      return a number.</p>
+      <div class='input'>
       <p>presets:
       <a href='#1819127'>azimuthal from the south pole</a>,
       <a href='#1822426'>Tom's fun swoopy</a>
       </p>
-      <table>
-        <tr>
-          <td>x = function(x, y)</td>
-          <td>
-            <textarea id='fx'>return x</textarea>
-          </td>
-          </tr><tr>
-          <td>y = function(x, y)</td>
-          <td>
-            <textarea id='fy'>return y</textarea>
-          </td>
-        </tr>
-      </table>
+      <label for='fx'>x = function(x, y)</label>
+      <textarea id='fx'>return x</textarea>
+      <label>y = function(x, y)</label>
+      <textarea id='fy'>return y</textarea>
+      <p class='help'>Fill in the blanks with the body of Javascript
+      tions implementing a projection. Both functions take
+      x &amp; y for longitude and latitude and should
+      return a number. <a href='https://github.com/tmcw/projectityourself'>broken? happy? angry? tell it to the github issue tracker.</a>
+      </p>
+      render
+      <button id='hifi'>hifi</button>
+      <button id='lofi'>lofi</button>
+      <button id='share-button'>share!</button>
+      <div id='share'>
+        <textarea id='gist-share'></textarea>
+        <p class='help'>Copy &amp; paste these contents into a new
+        <a href='https://gist.github.com/'>Gist</a>, and grab the new gist's
+        ID from the end of its url. That ID, tacked onto this url, like
+        <code>http://macwright.org/#1819127</code>, will autoload your
+        projection.</p>
+      </div>
+    </div>
 
-      <h2>3. Click do it</h2>
-      <button id='doit'>Do it!</button>
-
-      <canvas id='c2'></canvas>
-      <canvas id='c'></canvas>
-      <center>
-        <a href='https://github.com/tmcw/projectityourself'>broken? happy? angry? tell it to the github issue tracker.</a>
-      </center>
     </div>
     <script src='site.js'></script>
     <script type="text/javascript">
