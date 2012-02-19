@@ -110,6 +110,10 @@ document.getElementById('lofi').onclick = function() {
     load_and_draw();
 };
 
+document.getElementById('download').onclick = function() {
+  window.location.href = c2.toDataURL("image/png").replace("image/png", "image/octet-stream");
+};
+
 document.getElementById('share-button').onclick = function() {
     document.getElementById('share').style.display = 'block';
     document.getElementById('gist-share').value =
