@@ -123,6 +123,32 @@ document.getElementById('share-button').onclick = function() {
       document.getElementById('fy').value + '}';
 }
 
+var ldt;
+
+document.getElementById('fx').onkeyup = function() {
+    try {
+        if (ldt) window.clearTimeout(ldt);
+        eval('var fx = function(x, y) { ' + document.getElementById('fx').value + '}');
+        fx(10, 10);
+        document.getElementById('fx-error').innerHTML = '';
+        ldt = window.setTimeout(load_and_draw, 400);
+    } catch (e) {
+        document.getElementById('fx-error').innerHTML = e;
+    }
+}
+
+document.getElementById('fy').onkeyup = function() {
+    try {
+        if (ldt) window.clearTimeout(ldt);
+        eval('var fy = function(x, y) { ' + document.getElementById('fy').value + '}');
+        fy(10, 10);
+        document.getElementById('fy-error').innerHTML = '';
+        ldt = window.setTimeout(load_and_draw, 400);
+    } catch (e) {
+        document.getElementById('fy-error').innerHTML = e;
+    }
+}
+
 function loadpreset() {
 if (window.location.hash) {
   var id = parseInt(window.location.hash.substring(1));
@@ -142,6 +168,7 @@ if (window.location.hash) {
       fy.toString()
         .replace('function fy(x, y) {', '')
         .replace(/\}/g, '');
+    load_and_draw();
   };
   script.src = 'https://raw.github.com/gist/' + id;
 }
