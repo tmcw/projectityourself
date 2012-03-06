@@ -163,11 +163,11 @@ if (window.location.hash) {
     document.getElementById('fx').value =
       fx.toString()
         .replace('function fx(x, y) {', '')
-        .replace(/\}/g, '');
+        .replace(/\}/, '');
     document.getElementById('fy').value =
       fy.toString()
         .replace('function fy(x, y) {', '')
-        .replace(/\}/g, '');
+        .replace(/\}/, '');
     load_and_draw();
   };
   script.src = 'https://raw.github.com/gist/' + id;
