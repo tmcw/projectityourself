@@ -50,8 +50,8 @@ function draw(fx, fy) {
         mappings.push({
           color: pts[i].color,
           coord: [
-            ~~fx(pts[i].coord[0], pts[i].coord[1]),
-            ~~fy(pts[i].coord[0], pts[i].coord[1])
+            fx(pts[i].coord[0], pts[i].coord[1]),
+            fy(pts[i].coord[0], pts[i].coord[1])
           ]
         });
     }
