@@ -4,11 +4,11 @@ var canvas = document.getElementById('c2'),
     fctx = fcanvas.getContext('2d');
 
 var loaded = false;
-var w = ~~Math.min(window.innerHeight - 10, window.innerWidth - 500);
+var w = 640;
 canvas.width = w;
 canvas.height = w;
 fcanvas.width = w;
-fcanvas.height = 300;
+fcanvas.height = 640;
 
 var bm = new Image();
 bm.onload = function() {
@@ -40,8 +40,6 @@ function draw(fx, fy) {
             b = data[4 * ((y * w) + x) + 2];
         pts[i].color = 'rgb(' + [r, g, b].join(',') + ')';
     }
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, w, w);
 
     var mappings = [];
 
@@ -73,6 +71,8 @@ function draw(fx, fy) {
     }
     var xrange = maxx - minx;
     var yrange = maxy - miny;
+    canvas.width = w;
+    canvas.height = (yrange / xrange) * w;
     var scale_denom;
     if (xrange > yrange) {
         scale_denom = xrange / w;
