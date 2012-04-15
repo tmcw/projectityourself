@@ -4,17 +4,31 @@
     <title>Project it Yourself!</title>
     <link href='reset.css' rel='stylesheet' type='text/css' />
     <link href='site.css' rel='stylesheet' type='text/css' />
+    <script src='http://127.0.0.1:1337/'></script>
   </head>
   <body>
-    <canvas id='c2'></canvas>
-    <canvas id='c'></canvas>
     <div class='wrapper'>
       <div class='head'>
-        <h1>Project it Yourself!</h1>
+        <h1>Project it Yourself! (<a target='_blank' href='http://macwright.org/2012/03/12/project-it-yourself.html'>?</a>)</h1>
       </div>
 
       <div class='input'>
-      <p>presets:
+      <table><tr>
+        <td>
+        <label for='fx'>x = function(x, y)</label>
+        <textarea id='fx'>return x</textarea>
+        <small id='fx-error'></small>
+      </td><td>
+        <label>y = function(x, y)</label>
+        <textarea id='fy'>return y</textarea>
+        <small id='fy-error'></small>
+      </td></tr></table>
+      <p class='help'>Fill in the blanks with the body of Javascript
+      tions implementing a projection. Both functions take
+      x &amp; y for longitude and latitude and should
+      return a number. <a href='https://github.com/tmcw/projectityourself'>broken? happy? angry? tell it to the github issue tracker.</a>
+      </p>
+      <p class='help'>presets:
       <a href='#1819127'>azimuthal from the south pole</a>,
       <a href='#1822426'>Tom's fun swoopy</a>,
       <a href='#1988238'>Gall Peters</a>,
@@ -23,22 +37,13 @@
       <a href='#2010091'>Lambert cylindrical</a>,
       <a href='#1988386'>Sinusoidal</a>
       </p>
-      <label for='fx'>x = function(x, y)</label>
-      <textarea id='fx'>return x</textarea>
-      <small id='fx-error'></small>
-      <label>y = function(x, y)</label>
-      <textarea id='fy'>return y</textarea>
-      <small id='fy-error'></small>
-      <p class='help'>Fill in the blanks with the body of Javascript
-      tions implementing a projection. Both functions take
-      x &amp; y for longitude and latitude and should
-      return a number. <a href='https://github.com/tmcw/projectityourself'>broken? happy? angry? tell it to the github issue tracker.</a>
-      </p>
       render
       <button id='hifi'>hifi</button>
       <button id='lofi'>lofi</button>
       <button id='download'>download</button>
       <button id='share-button'>share!</button>
+      <button id='hidef'>super hifi (beware)</button>
+      <span id='status'></span>
       <div id='share'>
         <textarea id='gist-share'></textarea>
         <p class='help'>Copy &amp; paste these contents into a new
@@ -48,6 +53,9 @@
         projection.</p>
       </div>
     </div>
+
+    <canvas id='c2'></canvas>
+    <canvas id='c'></canvas>
 
     </div>
     <script src='site.js'></script>
