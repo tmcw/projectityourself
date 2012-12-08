@@ -74,7 +74,7 @@ svg.selectAll("path.land, path.boundary, path.graticule").transition()
                 .duration(750)
                 .attr("d", path);
             d3.timer.flush();
-            window.location.hash = window.encodeURIComponent(projection_body);
+            window.location.hash = btoa(projection_body);
         } catch(e) {
             console.log(e);
         }
@@ -88,7 +88,7 @@ svg.selectAll("path.land, path.boundary, path.graticule").transition()
 
 
     if (window.location.hash) {
-        editor.setValue(window.decodeURIComponent(window.location.hash.slice(1)));
+        editor.setValue(atob(window.location.hash.slice(1)));
         setProjection();
     } else {
         setProjection();
