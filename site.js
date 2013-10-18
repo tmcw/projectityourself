@@ -206,18 +206,14 @@ if (window.location.hash) {
     head.appendChild(script);
     document.getElementById('fx').value =
     document.getElementById('fy').value = '... loading preset ...';
-    script.onload = function() {
-      document.getElementById('fx').value =
-        fx.toString()
-          .replace('function fx(x, y) {', '')
-          .replace(/\}/, '');
-      document.getElementById('fy').value =
-        fy.toString()
-          .replace('function fy(x, y) {', '')
-          .replace(/\}/, '');
-      load_and_draw();
-    };
-    script.src = 'https://raw.github.com/gist/' + id;
+    d3.json('https://api.github.com/gists/' + id)
+        .on('load', function(d) {
+            d3.select('#fx')
+                .node().value = (d.files['x.js'] || {}).content;
+            d3.select('#fy')
+                .node().value = (d.files['y.js'] || {}).content;
+            load_and_draw();
+        }).get();
 }
 }
 
