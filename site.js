@@ -17,10 +17,48 @@ var editor = CodeMirror.fromTextArea(d3.select('#fn').node(), {
 
 var canvas = d3.select('#c')
     .attr('width', w)
-    .attr('height', h),
+    .attr('height', h)
+    .style('width', '100%'),
     ctx = canvas.node().getContext('2d');
 
+loadSource('img/bm_large.jpg', function() {
+    d3.select('#render').on('click', render);
+    loadGist();
+});
+
 function saveAsGist() {
+    var content = editor.getValue();
+    d3.xhr('https://api.github.com/gists')
+        .on('load', function(res) {
+            window.location.hash = '#' + res.id;
+        })
+        .on('error', function(res) {
+            alert('could not save');
+        })
+        .response(function(request) { return JSON.parse(request.responseText); })
+        .post(JSON.stringify({
+            description: 'Projection',
+            public: true,
+            files: {
+                'index.js': {
+                    content: content
+                }
+            }
+        }));
+}
+
+function loadGist() {
+    var id = parseInt(location.hash.substring(1), 10);
+    if (isNaN(id)) return;
+    d3.json('https://api.github.com/gists/' + id)
+        .on('load', function(gist) {
+            for (var k in gist.files) {
+                if (k === 'index.js') {
+                    return editor.setValue(gist.files[k].content);
+                }
+            }
+        })
+        .get();
 }
 
 function loadSource(src, cb) {
@@ -36,9 +74,6 @@ function loadSource(src, cb) {
     };
     tmpimg.src = src;
 }
-
-loadSource('img/bm_large.jpg', function(data) {
-});
 
 function onmessage(e) {
     var projected = [];
@@ -57,15 +92,18 @@ function onmessage(e) {
 }
 
 function evil(source) {
-     return URL.createObjectURL(new Blob([('self.onmessage=' + onmessage.toString() + ';' + source)], {type:'text/javascript'}));
+     return URL.createObjectURL(new Blob([('self.onmessage=' +
+        onmessage.toString() + ';' + source)], {
+        type:'text/javascript'
+     }));
 }
 
 function render() {
 
-    var workers = [];
-    var newData = ctx.createImageData(w, h);
-    var source = editor.getValue();
-    var remain = 675;
+    var workers = [],
+        newData = ctx.createImageData(w, h),
+        source = editor.getValue(),
+        remain = 675;
 
     for (var i = 0; i < 18; i++) {
         workers[i] = new Worker(evil(source));
@@ -77,7 +115,6 @@ function render() {
             y: y
         });
     }
-
 
     function projectedResult(e) {
         var projected = e.data.projected,
@@ -92,15 +129,12 @@ function render() {
         }
         if (!--remain) {
             ctx.putImageData(newData, 0, 0);
-            for (var i = 0; i < 18; i++) {
-                workers[i].terminate();
-            }
+            workers.forEach(function(worker) {
+                worker.terminate();
+            });
         }
     }
-
 }
-
-d3.select('#render').on('click', render);
 
 },{}]},{},[1])
 ;
