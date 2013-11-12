@@ -15,8 +15,8 @@ var editor = CodeMirror.fromTextArea(d3.select('#fn').node(), {
 });
 
 var canvas = d3.select('#c')
-    .attr('width', 1350)
-    .attr('height', 675),
+    .attr('width', w)
+    .attr('height', h),
     ctx = canvas.node().getContext('2d');
 
 function saveAsGist() {
@@ -39,39 +39,64 @@ function loadSource(src, cb) {
 loadSource('img/bm_large.jpg', function(data) {
 });
 
-var workers = [];
-for (var i = 0; i < 18; i++) {
-    workers[i] = new Worker('projection_worker.js');
-    workers[i].onmessage = projectedResult(i);
+function onmessage(e) {
+    var projected = [];
+    var i = 0, w = 1350;
+    var lat = ((e.data.y / 675) * 180) - 90;
+    for (var x = 0; x < w; x++) {
+        var lon = ((x / w) * 360) - 180;
+        var p = project(lon, lat);
+        projected[i] = (Math.round((p[0] + 180) * (1350 / 360)) * 4) + (Math.round((p[1] + 90) * (675 / 180)) * w * 4);
+        i++;
+    }
+    postMessage({
+        projected: projected,
+        y: e.data.y
+    });
 }
 
-function projectedResult(i) {
-    return function(data) {
-    };
+function evil(source) {
+     return URL.createObjectURL(new Blob([('self.onmessage=' + onmessage.toString() + ';' + source)], {type:'text/javascript'}));
 }
 
 function render() {
-    var source = editor.getValue(),
-        projected = [],
-        i = 0;
-    eval(source);
+
+    var workers = [];
+    var newData = ctx.createImageData(w, h);
+    var source = editor.getValue();
+    var remain = 675;
+
+    for (var i = 0; i < 18; i++) {
+        workers[i] = new Worker(evil(source));
+        workers[i].onmessage = projectedResult;
+    }
+
     for (var y = 0; y < 675; y++) {
-        for (var x = 0; x < 1350; x++) {
-            var p = project(x, y);
-            projected[i] = (Math.round(p[0]) * 4) + (Math.round(p[1]) * w * 4);
-            i++;
+        workers[y % 18].postMessage({
+            y: y
+        });
+    }
+
+
+    function projectedResult(e) {
+        var projected = e.data.projected,
+            offset = e.data.y * w;
+        for (var i = 0; i < projected.length; i++) {
+            if (projected[i] < 0 || projected[i] > (w * h * 4)) continue;
+            var j = (i + offset) * 4;
+            newData.data[j + 0] = _data.data[projected[i] + 0];
+            newData.data[j + 1] = _data.data[projected[i] + 1];
+            newData.data[j + 2] = _data.data[projected[i] + 2];
+            newData.data[j + 3] = _data.data[projected[i] + 3];
+        }
+        if (!--remain) {
+            ctx.putImageData(newData, 0, 0);
+            for (var i = 0; i < 18; i++) {
+                workers[i].terminate();
+            }
         }
     }
-    var newData = ctx.createImageData(w, h);
-    for (i = 0; i < projected.length; i++) {
-        var j = i * 4;
-        if (projected[i] < 0 || projected[i] > (w * h * 4)) continue;
-        newData.data[j + 0] = _data.data[projected[i] + 0];
-        newData.data[j + 1] = _data.data[projected[i] + 1];
-        newData.data[j + 2] = _data.data[projected[i] + 2];
-        newData.data[j + 3] = _data.data[projected[i] + 3];
-    }
-    ctx.putImageData(newData, 0, 0);
+
 }
 
 d3.select('#render').on('click', render);
