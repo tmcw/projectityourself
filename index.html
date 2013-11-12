@@ -1,76 +1,47 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Project it Yourself!</title>
-    <link href='reset.css' rel='stylesheet' type='text/css' />
-    <link href='site.css' rel='stylesheet' type='text/css' />
-    <script src='d3.v3.min.js'></script>
-  </head>
-  <body>
-    <div class='wrapper'>
-      <div class='head'>
-        <h1>Project it Yourself! (<a target='_blank' href='http://macwright.org/2012/03/12/project-it-yourself.html'>?</a>)</h1>
-      </div>
-
-      <div class='input'>
-      <table><tr>
-        <td>
-        <label for='fx'>x = function(x, y)</label>
-        <textarea id='fx'>return x</textarea>
-        <small id='fx-error'></small>
-      </td><td>
-        <label>y = function(x, y)</label>
-        <textarea id='fy'>return y</textarea>
-        <small id='fy-error'></small>
-      </td></tr></table>
-      <p class='help'>Fill in the blanks with the body of Javascript
-      tions implementing a projection. Both functions take
-      x &amp; y for longitude and latitude and should
-      return a number. <a href='https://github.com/tmcw/projectityourself'>broken? happy? angry? tell it to the github issue tracker.</a>
-      </p>
-      <p class='help'>presets:
-      <a href='#1819127'>azimuthal from the south pole</a>,
-      <a href='#1822426'>Tom's fun swoopy</a>,
-      <a href='#1988238'>Gall Peters</a>,
-      <a href='#1988320'>Spherical Mercator</a>,
-      <a href='#1988448'>Cassini</a>,
-      <a href='#2010091'>Lambert cylindrical</a>,
-      <a href='#1988386'>Sinusoidal</a>
-      </p>
-      render
-      <button id='hifi'>hifi</button>
-      <button id='lofi'>lofi</button>
-      <button id='download'>download</button>
-      <button id='share-button'>share!</button>
-      <button id='hidef'>super hifi (beware)</button>
-      <span id='status'></span>
-      <div id='share'>
-        <textarea id='gist-share'></textarea>
-        <p class='help'>Copy &amp; paste these contents into a new
-        <a href='https://gist.github.com/'>Gist</a>, and grab the new gist's
-        ID from the end of its url. That ID, tacked onto this url, like
-        <code>http://macwright.org/#1819127</code>, will autoload your
-        projection.</p>
-      </div>
+<head>
+<title>Project it Yourself!</title>
+<link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
+<link href='site.css' rel='stylesheet' type='text/css' />
+<script src='d3.v3.js'></script>
+<link href='codemirror/codemirror.css' rel='stylesheet' type='text/css' />
+<script src='codemirror/codemirror.js'></script>
+<script src='codemirror/javascript.js'></script>
+</head>
+<body>
+<div class='head fill-navy dark clearfix'>
+    <div class='col3 pad2'>
+        <h2>Project it Yourself! (<a target='_blank' href='http://macwright.org/2012/03/12/project-it-yourself.html'>?</a>)</h2>
     </div>
-
-    <canvas id='c2'></canvas>
-    <canvas id='c'></canvas>
-
+    <div class='col9 fl pad2'>
+        <div class='pill'>
+            <button class='button loud' id='render'>render</button><button class='button icon down' id='download'>download</button><button class='button icon share' id='share-button'>share!</button>
+        </div>
     </div>
-    <script src='site.js'></script>
-    <script type="text/javascript">
-  var _gauges = _gauges || [];
-  (function() {
-    var t   = document.createElement('script');
-    t.type  = 'text/javascript';
-    t.async = true;
-    t.id    = 'gauges-tracker';
-    t.setAttribute('data-site-id', '4e36eb1ef5a1f53d6f000001');
-    t.src = '//secure.gaug.es/track.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(t, s);
-  })();
+</div>
+<div>
+    <div class='pad2'>
+        <textarea class='monospace col12' id='fn'>function project(x, y) {
+    return [x, y];
+}</textarea>
+    </div>
+    <span id='status'></span>
+</div>
+<canvas id='c'></canvas>
+<script src='site.js'></script>
+<script type="text/javascript">
+var _gauges = _gauges || [];
+(function() {
+ var t   = document.createElement('script');
+ t.type  = 'text/javascript';
+ t.async = true;
+ t.id    = 'gauges-tracker';
+ t.setAttribute('data-site-id', '4e36eb1ef5a1f53d6f000001');
+ t.src = '//secure.gaug.es/track.js';
+ var s = document.getElementsByTagName('script')[0];
+ s.parentNode.insertBefore(t, s);
+ })();
 </script>
-  </body>
+</body>
 </html>
