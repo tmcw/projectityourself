@@ -1,3 +1,4 @@
+/* global CodeMirror d3 project */
 var _data;
 var w = 1350,
     h = 675;
@@ -31,7 +32,7 @@ function saveAsGist() {
         .on('load', function(res) {
             window.location.hash = '#' + res.id;
         })
-        .on('error', function(res) {
+        .on('error', function() {
             alert('could not save');
         })
         .response(function(request) { return JSON.parse(request.responseText); })
